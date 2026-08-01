@@ -1,0 +1,145 @@
+// Prisma schema for the peptide catalogue + order desk.
+//
+// Shape: Category -> Product -> ProductMedia (admin-uploaded images & video),
+// and Order -> OrderItem for buyer order requests. Only AdminUser can write.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  // Short line shown under the category name on the storefront.
+  tagline     String    @default("")
+  description String    @default("")
+  heroImage   String? // Cloudinary URL
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  name       String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  categoryId String
+
+  // --- Commerce ---
+  sku            String? @unique
+  priceCents     Int
+  compareAtCents Int? // optional "was" price for showing a discount
+  stock          Int     @default(0)
+  status         String  @default("AVAILABLE") // AVAILABLE | LOW_STOCK | SOLD_OUT | DRAFT
+  featured       Boolean @default(false)
+
+  // --- Peptide specification ---
+  sequence         String? // e.g. "H-His-Aib-Glu-Gly-..."
+  casNumber        String?
+  molecularFormula String?
+  molecularWeight  Float?
+  purityPercent    Float? // e.g. 99.2
+  sizeMg           Float? // vial size in mg
+  form             String  @default("Lyophilized powder")
+  packSize         String? // e.g. "10 vials per box"
+  storage          String? // e.g. "Store lyophilized at -20 °C, protect from light"
+  coaUrl           String? // link to the Certificate of Analysis
+
+  // --- Copy ---
+  shortDescription String @default("")
+  description      String @default("")
+  researchNotes    String?
+
+  media      ProductMedia[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([featured])
+}
+
+model ProductMedia {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  url       String
+  alt       String  @default("")
+  type      String  @default("image") // "image" | "video"
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model Order {
+  id        String @id @default(cuid())
+  // Human-friendly lookup code the buyer uses to check status, e.g. "PEP-7QK3M2".
+  reference String @unique
+
+  customerName String
+  email        String
+  phone        String?
+  organization String?
+
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String?
+  postalCode   String
+  country      String
+
+  notes String?
+
+  subtotalCents Int
+  shippingCents Int
+  totalCents    Int
+
+  // NEW -> CONFIRMED -> PAID -> SHIPPED, or CANCELLED at any point.
+  status     String  @default("NEW")
+  adminNotes String?
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+
+  // Kept nullable so deleting a product never destroys order history.
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?
+
+  // Snapshots — the order must still read correctly if the product changes.
+  nameSnapshot String
+  sizeSnapshot String?
+  slugSnapshot String?
+
+  unitPriceCents Int
+  quantity       Int
+  lineTotalCents Int
+
+  @@index([orderId])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
