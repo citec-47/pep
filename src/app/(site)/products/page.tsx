@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getCategories, getProducts, type ProductFilters } from "@/lib/data";
 import { ProductCard } from "@/components/product-card";
-import { EmptyState, ResearchNotice, buttonClass } from "@/components/ui";
+import { EmptyState, buttonClass } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Catalogue",
@@ -158,8 +158,6 @@ export default async function ProductsPage({
           ))}
         </div>
       )}
-
-      <ResearchNotice className="mt-12" />
     </div>
   );
 }

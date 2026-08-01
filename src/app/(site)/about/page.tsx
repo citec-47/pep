@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ButtonLink, ResearchNotice, SectionHeading } from "@/components/ui";
+import { ButtonLink, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "About & terms",
@@ -22,8 +22,6 @@ export default function AboutPage() {
         each batch ourselves, and confirm availability with you before any money
         changes hands.
       </p>
-
-      <ResearchNotice className="mt-8" />
 
       <section className="mt-12">
         <SectionHeading eyebrow="Ordering" title="From request to dispatch" />

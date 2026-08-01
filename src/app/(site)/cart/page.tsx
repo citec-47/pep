@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CartView } from "@/components/cart-view";
-import { ResearchNotice } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Your order",
@@ -22,8 +21,6 @@ export default function CartPage() {
       </header>
 
       <CartView />
-
-      <ResearchNotice className="mt-10" />
     </div>
   );
 }

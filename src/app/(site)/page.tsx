@@ -4,7 +4,7 @@ import { getCategories, getFeaturedProducts, getLatestProducts } from "@/lib/dat
 import { formatPrice, formatMg } from "@/lib/format";
 import { ProductCard } from "@/components/product-card";
 import { ProductArtwork } from "@/components/product-artwork";
-import { ButtonLink, ResearchNotice, StockBadge } from "@/components/ui";
+import { ButtonLink, StockBadge } from "@/components/ui";
 
 const WRAP = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
 
@@ -216,8 +216,6 @@ export default async function HomePage() {
             ))}
           </ol>
         </div>
-
-        <ResearchNotice className="mt-12" />
       </section>
     </>
   );

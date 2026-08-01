@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCart } from "./cart-provider";
 import { formatPrice } from "@/lib/format";
 import { shippingFor } from "@/lib/pricing";
-import { ResearchNotice, buttonClass } from "./ui";
+import { buttonClass } from "./ui";
 
 export type CheckoutState =
   | { error?: string; reference?: undefined }
@@ -178,8 +178,6 @@ export function CheckoutForm({ action }: { action: CheckoutAction }) {
             </dd>
           </div>
         </dl>
-
-        <ResearchNotice />
 
         <label className="flex items-start gap-3">
           <input

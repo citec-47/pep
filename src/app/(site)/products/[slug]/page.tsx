@@ -6,7 +6,7 @@ import { formatPrice, formatMg } from "@/lib/format";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductCard } from "@/components/product-card";
 import { AddToCart } from "@/components/add-to-cart";
-import { SpecRow, StockBadge, ResearchNotice } from "@/components/ui";
+import { SpecRow, StockBadge } from "@/components/ui";
 
 type Params = { slug: string };
 
@@ -168,8 +168,6 @@ export default async function ProductPage({
               )}
             </section>
           )}
-
-          <ResearchNotice />
         </div>
       </div>
 

@@ -136,17 +136,3 @@ export function EmptyState({
     </div>
   );
 }
-
-/** Standing notice: this catalogue is research-use-only. */
-export function ResearchNotice({ className = "" }: { className?: string }) {
-  return (
-    <p
-      className={`rounded-[var(--radius-xl)] border border-amber/25 bg-amber-soft px-4 py-3 text-xs leading-relaxed text-amber ${className}`}
-    >
-      <strong className="font-semibold">For laboratory research use only.</strong>{" "}
-      Not for human or veterinary consumption, and not for diagnostic or
-      therapeutic use. Buyers confirm they are qualified researchers and are
-      responsible for compliance with local regulations.
-    </p>
-  );
-}
