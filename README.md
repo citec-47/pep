@@ -1,4 +1,4 @@
-# PeptideLab
+# PeptideLab. 
 
 A peptide catalogue and order desk. **Only the admin can publish products.**
 Buyers browse, build an order and submit it as a request. No payment is taken
